@@ -1,0 +1,176 @@
+services:
+  validator:
+    image: validator
+    hostname: validator
+    build:
+      context: .
+      dockerfile: Dockerfile.validator
+    healthcheck:
+      # To see healthcheck output:
+      # docker inspect --format "{{json .State.Health }}" docker-validator-1 | jq
+      test: [ "CMD", "/opt/validator-healthcheck.sh" ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    # uncomment to provide amount of sequencers to provision (default: 1)
+    # command: [ "/opt/entrypoint.sh", "2" ]
+    volumes:
+      - type: bind
+        source: ./credentials
+        target: /credentials
+      - genesis:/genesis
+    networks:
+      - monitoring-network
+
+  sequencer-0:
+    image: bridge
+    hostname: sequencer-0
+    build:
+      context: .
+      dockerfile: Dockerfile.bridge
+    depends_on:
+      - validator
+    healthcheck:
+      # To see healthcheck output:
+      # docker inspect --format "{{json .State.Health }}" docker-sequencer-0-1 | jq
+      test: [ "CMD", "/opt/bridge-healthcheck.sh", "/credentials/bridge-0.jwt" ]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+    # uncomment to provide the id of the sequencer (default: 0)
+    # command: ["/opt/entrypoint.sh", "0"]
+    ports:
+      - 26658:26658
+    volumes:
+      - type: bind
+        source: ./credentials
+        target: /credentials
+        consistency: consistent
+      - genesis:/genesis
+    networks:
+      - monitoring-network
+
+#  #   Uncomment for another sequencer
+#  #   remember to adjust services.validator.command
+#  sequencer-1:
+#    image: bridge
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.bridge
+#    depends_on:
+#      - validator
+#    healthcheck:
+#      test: [ "CMD", "/opt/bridge-healthcheck.sh", "/credentials/bridge-1.jwt" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 30
+#      start_period: 10s
+#    # The first argument is the id of the sequencer (default: 0)
+#    command: [ "/opt/entrypoint.sh", "1" ]
+#    ports:
+#      # remap the default port as it's already used
+#      - 36658:26658
+#    volumes:
+#      - credentials:/credentials:consistent
+#      - genesis:/genesis
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+    ports:
+      - "9090:9090"
+    profiles:
+      - monitoring
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - monitoring-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources/
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards/
+    depends_on:
+      - prometheus
+    profiles:
+      - monitoring
+    networks:
+      - monitoring-network
+
+  toxiproxy:
+    image: shopify/toxiproxy
+    hostname: toxiproxy
+    depends_on:
+      - sequencer-0
+    ports:
+      - 26659:26659
+      - 8474:8474
+    networks:
+      - monitoring-network
+
+  toxiproxy-config:
+    image: curlimages/curl:8.9.1
+    depends_on:
+      - toxiproxy
+    networks:
+      - monitoring-network
+    volumes:
+      - ./toxiproxy:/opt/toxiproxy
+    command: [ "/opt/toxiproxy/configure.sh" ]
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=sovereign
+      - DOCKER_INFLUXDB_INIT_BUCKET=sov-rollup
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=sovereign
+    volumes:
+      - type: bind
+        source: ./influxdb-data
+        target: /var/lib/influxdb2
+        consistency: consistent
+    networks:
+      - monitoring-network
+
+  telegraf:
+    image: telegraf:1.27
+    container_name: telegraf
+    depends_on:
+      - influxdb
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    links:
+      - influxdb
+    ports:
+      - "8094:8094/udp"
+    environment:
+      - HOST_PROC=/host/proc
+      - HOST_SYS=/host/sys
+      - HOST_ETC=/host/etc
+    networks:
+      - monitoring-network
+
+volumes:
+  # a temporary fs where the genesis hash is announced
+  genesis:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+
+networks:
+  monitoring-network:
+    driver: bridge

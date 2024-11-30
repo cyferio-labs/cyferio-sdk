@@ -1,0 +1,9 @@
+{
+  "mint": {
+    "coins": {
+      "amount": 3000,
+      "token_id": "token_1nyl0e0yweragfsatygt24zmd8jrr2vqtvdfptzjhxkguz2xxx3vs0y07u7"
+    },
+    "mint_to_address": "sov15vspj48hpttzyvxu8kzq5klhvaczcpyxn6z6k0hwpwtzs4a6wkvqwr57gc"
+  }
+}

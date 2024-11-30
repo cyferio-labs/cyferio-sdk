@@ -1,0 +1,77 @@
+[package]
+name = "stf-starter"
+version = { workspace = true }
+edition = { workspace = true }
+resolver = "2"
+authors = { workspace = true }
+license = { workspace = true }
+homepage = "sovereign.xyz"
+publish = false
+
+[dependencies]
+sov-modules-api = { workspace = true }
+sov-state = { workspace = true }
+sov-accounts = { workspace = true }
+sov-nonces = { workspace = true }
+sov-bank = { workspace = true }
+sov-chain-state = { workspace = true }
+sov-blob-storage = { workspace = true }
+sov-prover-incentives = { workspace = true }
+sov-attester-incentives = { workspace = true }
+sov-sequencer-registry = { workspace = true }
+sov-paymaster = { workspace = true }
+sov-mock-da = { workspace = true }
+sov-modules-stf-blueprint = { workspace = true }
+sov-sequencer = { workspace = true, optional = true }
+sov-rollup-interface = { workspace = true }
+sov-capabilities = { workspace = true }
+sov-kernels = { workspace = true }
+sov-rollup-apis = { workspace = true, optional = true }
+
+tracing = { workspace = true }
+example-module = { workspace = true }
+strum = { workspace = true }
+
+anyhow = { workspace = true }
+serde = { workspace = true, features = ["derive", "rc"] }
+serde_json = { workspace = true }
+jsonrpsee = { workspace = true, features = ["http-client", "server"], optional = true }
+borsh = { workspace = true, features = ["rc", "bytes"] }
+clap = { workspace = true, features = ["derive"], optional = true }
+tokio = { workspace = true, features = ["sync"], optional = true }
+
+[features]
+default = []
+native = [
+	"clap",
+	"jsonrpsee",
+	"sov-accounts/native",
+	"sov-attester-incentives/native",
+	"sov-bank/native",
+	"sov-capabilities/native",
+	"sov-chain-state/native",
+	"sov-blob-storage/native",
+	"sov-mock-da/native",
+	"sov-modules-api/native",
+	"sov-modules-stf-blueprint/native",
+	"sov-nonces/native",
+	"sov-prover-incentives/native",
+	"sov-rollup-interface/native",
+	"sov-state/native",
+	"sov-sequencer",
+	"sov-sequencer-registry/native",
+	"tokio",
+	"sov-capabilities/native",
+	"sov-state/native",
+	"example-module/native",
+	"sov-rollup-apis",
+	"sov-kernels/native",
+	"sov-paymaster/native"
+]
+bench = [
+	"sov-modules-api/bench",
+	"sov-modules-stf-blueprint/bench",
+	"sov-sequencer-registry/bench",
+	"sov-state/bench"
+	
+]

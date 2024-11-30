@@ -1,0 +1,88 @@
+[package]
+name = "sov-rollup-starter"
+version = { workspace = true }
+edition = { workspace = true }
+resolver = "2"
+authors = { workspace = true }
+license = { workspace = true }
+homepage = "sovereign.xyz"
+publish = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sov-modules-api = { workspace = true, features = ["native"] }
+sov-state = { workspace = true }
+sov-kernels = { workspace = true, features = ["native"] }
+sov-mock-zkvm = { workspace = true, features = ["native"] }
+tracing-appender = { workspace = true }
+sov-accounts = { workspace = true, features = ["native"] }
+sov-bank = { workspace = true, features = ["native"] }
+sov-ledger-apis = { workspace = true }
+sov-sequencer-registry = { workspace = true, features = ["native"] }
+sov-attester-incentives = { workspace = true, features = ["native"] }
+sov-modules-rollup-blueprint = { workspace = true }
+sov-modules-stf-blueprint = { workspace = true, features = ["native"] }
+sov-stf-runner = { workspace = true }
+sov-cli = { workspace = true }
+
+sov-db = { workspace = true }
+sov-sequencer = { workspace = true }
+sov-rollup-interface = { workspace = true }
+sov-mock-da = { workspace = true, features = ["native"], optional = true }
+sov-cyferio-hub = { workspace = true, features = ["native"], optional = true }
+
+axum = { workspace = true }
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+backon = "0.4.4"
+borsh = { workspace = true }
+clap = { workspace = true }
+serde = { workspace = true }
+tracing = { workspace = true }
+serde_json = { workspace = true }
+jsonrpsee = { workspace = true }
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
+sha2 = { workspace = true }
+prometheus_exporter = { workspace = true }
+
+risc0-starter = { path = "../provers/risc0", optional = true }
+sp1-starter = { path = "../provers/sp1", optional = true }
+stf-starter = { path = "../stf", features = ["native"] }
+sov-risc0-adapter = { workspace = true, features = ["native"], optional = true }
+sov-sp1-adapter = { workspace = true, features = ["native"], optional = true }
+
+# binary dependencies
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+tracing-panic = "0.1.2"
+bytes = "1.7.2"
+rand = "0.8.5"
+
+[dev-dependencies]
+tempfile = { workspace = true }
+sov-mock-zkvm = { workspace = true, features = ["native"] }
+sov-test-utils = { workspace = true }
+futures = { version = "0.3", default-features = false }
+
+[build-dependencies]
+sov-modules-api = { workspace = true }
+sov-mock-zkvm = { workspace = true, features = ["native"] }
+sov-mock-da = { workspace = true, features = ["native"] }
+serde_json = { workspace = true }
+stf-starter = { workspace = true, features = ["native"] }
+sov-universal-wallet = { workspace = true, features = ["serde"] }
+
+[features]
+default = ["cyferio_da", "risc0"]                 # set mock_da as the default features
+mock_da = ["sov-mock-da"]
+cyferio_da = ["sov-cyferio-hub"]
+sp1 = ["sov-sp1-adapter", "sp1-starter"]
+risc0 = ["sov-risc0-adapter", "risc0-starter"]
+
+[[bin]]
+name = "node"
+path = "src/bin/node.rs"
+
+[[bin]]
+name = "starter-cli-wallet"
+path = "src/bin/starter_cli_wallet.rs"

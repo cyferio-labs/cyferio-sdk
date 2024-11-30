@@ -1,0 +1,65 @@
+[da]
+# Connection string for SQL database to have stored blocks, for example"
+#  - "sqlite://demo_data/da.sqlite?mode=rwc"
+#  - "sqlite::memory:"
+#  - "postgresql://root:hunter2@aws.amazon.com/mock-da"
+connection_string = "sqlite://mock_da.sqlite?mode=rwc"
+# String representation of sequencer address.
+# For initial full node should match genesis of sequencer-registry.
+# It is going to be a DA address that blobs from this node will be associated.
+sender_address = "0000000000000000000000000000000000000000000000000000000000000000"
+# Defines how new blocks should be produced.
+# Can be 2 options:
+#  - periodic: new blocks produced periodically every `block_time_ms`.
+#              Empty blocks can be produced with this option.
+#  - on_submit: new blocks are produced on submission of batch/blob.
+#              `block_time_ms` defines maximum waiting time for a new block
+block_producing = "periodic"
+# Block time depends on `block_producing`:
+# For `periodic` it defines how often new blocks will be produced, approximately.
+# For `on_submit` it defines max time service will wait for a new block.
+block_time_ms = 3_000
+
+[storage]
+# The path to the rollup's data directory. Paths that do not begin with `/` are interpreted as relative paths.
+path = "../../rollup-starter-data"
+
+# We define the rollup's genesis to occur at block number `start_height`. The rollup will ignore
+# any blocks before this height
+[runner]
+genesis_height = 0
+da_polling_interval_ms = 1000
+
+[runner.rpc_config]
+bind_host = "127.0.0.1"
+bind_port = 12345
+
+[monitoring]
+telegraf_address = "127.0.0.1:8094"
+# Defines how many measurements a rollup node will accumulate before sending it to the Telegraf.
+# It is expected from the rollup node to produce metrics all the time,
+# so measurements are buffered by size and not sent by time.
+# and below 67 KB, which is the maximal UDP packet size.
+# It also means that if a single serialized metric is larger than this value, a UDP packet will be larger.
+# The default value is 508.
+# max_datagram_size = 508
+# How many metrics are allowed to be in pending state, before new metrics will be dropped.
+# This is a number of metrics, not serialized bytes.
+# The total number of bytes to be held in memory might vary per metric + `max_datagram_size`
+# max_pending_metrics = 100
+
+[runner.axum_config]
+bind_host = "127.0.0.1"
+bind_port = 12346
+
+[proof_manager]
+aggregated_proof_block_jump = 1
+prover_address = "sov1pv9skzctpv9skzctpv9skzctpv9skzctpv9skzctpv9skzctpv9stup8tx"
+max_number_of_transitions_in_db = 100
+max_number_of_transitions_in_memory = 20
+
+
+[sequencer]
+max_allowed_blocks_behind = 5
+da_address = "0000000000000000000000000000000000000000000000000000000000000000"
+[sequencer.preferred]
