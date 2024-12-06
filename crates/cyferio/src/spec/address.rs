@@ -1,11 +1,11 @@
+use anyhow::Context;
+use borsh::{BorshDeserialize, BorshSerialize};
 use core::str::FromStr;
 use serde::{Deserialize, Serialize};
+use sov_rollup_interface::reexports::schemars::{self};
+use sov_rollup_interface::sov_universal_wallet::UniversalWallet;
 use std::hash::Hash;
 use subxt::utils::{AccountId32, MultiAddress};
-use sov_rollup_interface::reexports::schemars::{self};
-use borsh::{BorshDeserialize, BorshSerialize};
-use sov_rollup_interface::sov_universal_wallet::UniversalWallet;
-use anyhow::Context;
 
 #[derive(
     Debug,
@@ -22,10 +22,7 @@ use anyhow::Context;
     BorshDeserialize,
     UniversalWallet,
 )]
-pub struct CyferioAddress(
-    #[sov_wallet(as_ty = "CyferioAddressSchema")]
-    [u8; 32]
-);
+pub struct CyferioAddress(#[sov_wallet(as_ty = "CyferioAddressSchema")] [u8; 32]);
 
 const CYFERIO: &str = "cyferio";
 // Add schema definition for UniversalWallet
@@ -98,7 +95,8 @@ impl TryFrom<&[u8]> for CyferioAddress {
             let s = unsafe { std::str::from_utf8_unchecked(bytes) };
             s.parse().context("failed parsing cyferio address")
         } else {
-            bytes.try_into()
+            bytes
+                .try_into()
                 .map(Self)
                 .context("Invalid address length: expected 32 bytes")
         }
