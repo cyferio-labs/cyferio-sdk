@@ -1,0 +1,68 @@
+[package]
+name = "confidential-token"
+description = "A module for confidential fungible tokens, analogous to Encrypted ERC20"
+version = { workspace = true }
+edition = { workspace = true }
+resolver = "2"
+authors = { workspace = true }
+license = { workspace = true }
+readme = "README.md"
+publish = false
+
+[dependencies]
+anyhow = { workspace = true }
+borsh = { workspace = true, features = ["rc"] }
+serde = { workspace = true }
+schemars = { workspace = true }
+hex = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+derive_more = { workspace = true, features = ["display"] }
+proptest = { workspace = true, optional = true }
+strum = { workspace = true }
+jsonrpsee = { workspace = true }
+
+sov-modules-api = { workspace = true }
+sov-state = { workspace = true }
+
+# FHE depencencies
+[target.'cfg(all(target_arch = "x86_64", unix))'.dependencies]
+tfhe = { version = "0.7.2", features = ["boolean", "shortint", "integer", "x86_64-unix"] }
+[target.'cfg(all(target_arch = "x86_64", not(unix)))'.dependencies]
+tfhe = { version = "0.7.2", features = ["boolean", "shortint", "integer", "x86_64"] }
+[target.'cfg(all(target_arch = "aarch64", unix))'.dependencies]
+tfhe = { version = "0.7.2", features = ["boolean", "shortint", "integer", "aarch64-unix"] }
+bincode = { workspace = true }
+serde_json = { workspace = true }
+hex = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+confidential-token = { path = ".", features = ["native"] }
+sov-modules-stf-blueprint = { workspace = true }
+sov-test-utils = { workspace = true }
+
+[features]
+default = []
+arbitrary = [
+    "confidential-token/arbitrary",
+    "sov-modules-api/arbitrary",
+    "sov-state/arbitrary",
+    "sov-test-utils/arbitrary",
+]
+native = [
+    "confidential-token/native",
+    "sov-modules-api/native",
+    "sov-state/native",
+    "sov-modules-stf-blueprint/native",
+]
+cli = ["native"]
+test-utils = []
+
+[[bin]]
+name = "fhe-keygen"
+path = "src/bin/fhe_keygen.rs"
+
+[[bin]]
+name = "request-scripts-gen"
+path = "src/bin/request_scripts_gen.rs"
