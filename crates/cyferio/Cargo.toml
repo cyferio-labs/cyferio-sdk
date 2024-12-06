@@ -15,7 +15,7 @@ codec = { package = "parity-scale-codec", version = "3.0.0", default-features = 
     "full",
     "bit-vec",
 ], optional = true }
-derive_more = { version = "1.0", default-features = false, features = ["std"] }
+derive_more = { workspace = true, features = ["display"] }
 sha2 = "0.10.6"
 parking_lot = "0.12.1"
 base64 = "0.22.1"
@@ -40,7 +40,7 @@ reqwest = { version = "0.12", features = [
     "rustls-tls",
     "json",
 ], default-features = false, optional = true }
-thiserror = "1.0.50"
+thiserror = { workspace = true }
 sp-keyring = { version = "24", optional = true }
 sp-core = { version = "21", optional = true }
 hex = { version = "0.4.3" }

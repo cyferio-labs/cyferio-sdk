@@ -2,9 +2,9 @@ use super::hash::CyferioHash;
 use serde::{Deserialize, Serialize};
 use sov_rollup_interface::da::BlockHeaderTrait;
 use subxt::config::substrate::Digest;
+use subxt::config::substrate::H256;
 use subxt_core::config::substrate::BlakeTwo256;
 use subxt_core::config::substrate::SubstrateHeader;
-use subxt::config::substrate::H256;
 
 const KATE_START_TIME: i64 = 1686066440;
 const KATE_SECONDS_PER_BLOCK: i64 = 20;
@@ -103,7 +103,6 @@ impl From<(&SubstrateHeader<u32, BlakeTwo256>, H256)> for CyferioHeader {
         )
     }
 }
-
 
 // #[cfg(feature = "native")]
 // impl From<(&SubstrateHeader<u32, BlakeTwo256>, Option<H256>)> for CyferioHeader {

@@ -13,6 +13,7 @@ use base64::{engine::general_purpose, Engine as _};
 use futures::stream::BoxStream;
 use parking_lot::Mutex;
 use schemars::JsonSchema;
+use sov_rollup_interface::common::HexHash;
 use sov_rollup_interface::da::{DaSpec, RelevantBlobs, RelevantProofs};
 use sov_rollup_interface::node::da::{DaService, MaybeRetryable, SubmitBlobReceipt};
 use std::collections::HashSet;
@@ -25,7 +26,6 @@ use subxt::{OnlineClient, SubstrateConfig};
 use subxt_signer::sr25519::dev;
 use tokio::time::{sleep, Duration};
 use tracing::instrument;
-use sov_rollup_interface::common::HexHash;
 
 #[subxt::subxt(runtime_metadata_path = "./src/metadata.scale")]
 pub mod substrate {}
@@ -504,7 +504,7 @@ impl DaService for DaProvider {
         if task_submitted_event.is_some() {
             // Ok(SubmitBlobReceipt::new(CyferioHash::from(tx_hash.0), fee))
             Ok(SubmitBlobReceipt {
-                blob_hash:HexHash::new(tx_hash.0),
+                blob_hash: HexHash::new(tx_hash.0),
                 transaction_id: CyferioHash::from(tx_hash.0),
             })
         } else {
@@ -567,7 +567,7 @@ impl DaService for DaProvider {
         if task_submitted_event.is_some() {
             // Ok(SubmitBlobReceipt::new(CyferioHash::from(tx_hash.0), fee))
             Ok(SubmitBlobReceipt {
-                blob_hash:HexHash::new(tx_hash.0),
+                blob_hash: HexHash::new(tx_hash.0),
                 transaction_id: CyferioHash::from(tx_hash.0),
             })
         } else {

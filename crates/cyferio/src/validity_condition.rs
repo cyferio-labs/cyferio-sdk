@@ -35,7 +35,9 @@ pub struct CyferioValidityCondChecker<Cond: ValidityCondition> {
     phantom: PhantomData<Cond>,
 }
 
-impl ValidityConditionChecker<CyferioValidityCond> for CyferioValidityCondChecker<CyferioValidityCond> {
+impl ValidityConditionChecker<CyferioValidityCond>
+    for CyferioValidityCondChecker<CyferioValidityCond>
+{
     type Error = Error;
 
     fn check(&mut self, condition: &CyferioValidityCond) -> Result<(), Self::Error> {
