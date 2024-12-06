@@ -5,6 +5,13 @@ burn = [2, 2]
 mint = [2, 2]
 freeze = [1, 1]
 
+[gas.ConfidentialToken]
+create_token = [0, 0]
+transfer = [0, 0]
+burn = [0, 0]
+mint = [0, 0]
+freeze = [0, 0]
+
 [constants]
 # We use the ID 4321 for demo purposes. Change this value before deploying!
 CHAIN_ID = 4321
@@ -33,15 +40,20 @@ GAS_TOKEN_ID = { bech32 = "token_1nyl0e0yweragfsatygt24zmd8jrr2vqtvdfptzjhxkguz2
 ADDRESS_PREFIX = { const = "sov" }
 # --- Gas parameters to charge for state accesses ---
 # The cost of a storage access operation.
-GAS_TO_CHARGE_FOR_ACCESS = [5, 5]
+# GAS_TO_CHARGE_FOR_ACCESS = [5, 5]
+GAS_TO_CHARGE_FOR_ACCESS = [0, 0]
 # Gas to refund for a read from a hot storage slot
-GAS_TO_REFUND_FOR_HOT_ACCESS = [4, 4]
+# GAS_TO_REFUND_FOR_HOT_ACCESS = [4, 4]
+GAS_TO_REFUND_FOR_HOT_ACCESS = [0, 0]
 # Gas to charge for a write to a cold storage slot
-GAS_TO_CHARGE_FOR_WRITE = [10, 10]
+# GAS_TO_CHARGE_FOR_WRITE = [10, 10]
+GAS_TO_CHARGE_FOR_WRITE = [0, 0]
 # Gas to refund for a write to a hot storage slot
-GAS_TO_REFUND_FOR_HOT_WRITE = [8, 8]
+# GAS_TO_REFUND_FOR_HOT_WRITE = [8, 8]
+GAS_TO_REFUND_FOR_HOT_WRITE = [0, 0]
 # Gas to charge for decoding a state access
-GAS_TO_CHARGE_FOR_DECODING = [2, 2]
+# GAS_TO_CHARGE_FOR_DECODING = [2, 2]
+GAS_TO_CHARGE_FOR_DECODING = [0, 0]
 # --- End Gas parameters to charge for state accesses ---
 # --- Gas parameters to specify how to charge gas for hashing ---
 # The cost of updating a hash.
@@ -67,7 +79,8 @@ PROCESS_TX_PRE_EXEC_GAS = [0, 0]
 MAX_AUTHENTICATION_GAS_PER_TX =  [100000, 100000]
 # --- End Gas parameters to specify how to charge gas for signature verification ---
 # The cost of deserializing a message using Borsh
-DEFAULT_GAS_TO_CHARGE_PER_BYTE_BORSH_DESERIALIZATION = [1, 1]
+# DEFAULT_GAS_TO_CHARGE_PER_BYTE_BORSH_DESERIALIZATION = [1, 1]
+DEFAULT_GAS_TO_CHARGE_PER_BYTE_BORSH_DESERIALIZATION = [0, 0]
 # The percentage of the "base fee" that is burned when a transaction is processed.
 # The portion that is not burned is awarded to provers and/or attesters on the network.
 PERCENT_BASE_FEE_TO_BURN = 10
