@@ -1,0 +1,103 @@
+# Specification for custom confidential-token REST API endpoints
+openapi: "3.0.2"
+info:
+  title: Confidential-token custom endpoints
+  version: 0.1.0
+paths:
+  /tokens/{token_id}/total-supply:
+    get:
+      summary: Get the total supply of a specific token
+      operationId: "confidential_token_custom_token_get_total_supply"
+      tags: [Confidential-token]
+      parameters:
+        - name: token_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/TokenId'
+      responses:
+        '200':
+          $ref: '#/components/responses/CoinsResponse'
+        '404':
+          # Referring type from `runtime-base.yaml`
+          $ref: '#/components/responses/StateNotFound'
+  /tokens/{token_id}/balances/{address}:
+    get:
+      summary: Fetch the current balance of the token for a given user
+      operationId: "confidential_token_custom_token_get_user_balance"
+      tags: [Confidential-token]
+      parameters:
+        - name: token_id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/TokenId'
+        - name: address
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Address'
+      responses:
+        '200':
+          $ref: '#/components/responses/CoinsResponse'
+        '404':
+          # Referring type from `runtime-base.yaml`
+          $ref: '#/components/responses/StateNotFound'
+  /tokens:
+    get:
+      summary: Compute a token ID from the given parameters
+      operationId: "confidential_token_custom_token_compute_token_id"
+      tags: [Confidential-token]
+      parameters:
+        - name: token_name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The name of the token to filter by
+        - name: sender
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Address'
+          description: The address of the deployer of the token
+      responses:
+        '200':
+          $ref: '#/components/responses/CoinsResponse'
+        '404':
+          # Referring type from `runtime-base.yaml`
+          $ref: '#/components/responses/StateNotFound'
+
+components:
+  schemas:
+    Meta:
+      type: object
+    TokenId:
+      type: string
+      pattern: "^token_1[02-9ac-hj-np-z]+$"
+      description: bech32 encoded token id, prefix with "token_".
+    Address:
+      type: string
+      description: The address of a rollup user.
+    Coins:
+      type: object
+      description: Token Id and amount
+      properties:
+        token_id:
+          $ref: "#/components/schemas/TokenId"
+        amount:
+          type: integer
+          format: uint64
+          description: Amount
+  responses:
+    CoinsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              meta:
+                $ref: '#/components/schemas/Meta'
+              data:
+                $ref: '#/components/schemas/Coins'
