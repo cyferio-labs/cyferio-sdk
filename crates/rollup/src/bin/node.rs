@@ -165,10 +165,7 @@ async fn new_rollup(
     rollup_config_path: &str,
     prover_config: Option<RollupProverConfig>,
 ) -> Result<Rollup<CyferioRollup<Native>, Native>, anyhow::Error> {
-    tracing::info!(
-        "Starting Cyferio rollup with config {}",
-        rollup_config_path
-    );
+    tracing::info!("Starting Cyferio rollup with config {}", rollup_config_path);
 
     let rollup_config: RollupConfig<Address<Sha256>, DaServiceWithRetries<DaProvider>> =
         from_toml_path(rollup_config_path).with_context(|| {

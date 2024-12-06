@@ -40,6 +40,9 @@ borsh = { workspace = true, features = ["rc", "bytes"] }
 clap = { workspace = true, features = ["derive"], optional = true }
 tokio = { workspace = true, features = ["sync"], optional = true }
 
+# fhe modules
+confidential-token = { workspace = true, features = ["native"] }
+
 [features]
 default = []
 native = [
@@ -66,7 +69,8 @@ native = [
 	"example-module/native",
 	"sov-rollup-apis",
 	"sov-kernels/native",
-	"sov-paymaster/native"
+	"sov-paymaster/native",
+	"confidential-token/native"
 ]
 bench = [
 	"sov-modules-api/bench",

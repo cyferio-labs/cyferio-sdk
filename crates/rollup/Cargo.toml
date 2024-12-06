@@ -58,6 +58,9 @@ tracing-panic = "0.1.2"
 bytes = "1.7.2"
 rand = "0.8.5"
 
+# fhe modules
+confidential-token = { workspace = true, features = ["native"] }
+
 [dev-dependencies]
 tempfile = { workspace = true }
 sov-mock-zkvm = { workspace = true, features = ["native"] }
