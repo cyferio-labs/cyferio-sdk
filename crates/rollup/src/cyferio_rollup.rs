@@ -3,11 +3,10 @@
 
 use anyhow::Error;
 use async_trait::async_trait;
-use sov_db::ledger_db::LedgerDb;
-use sov_db::storage_manager::NativeStorageManager;
 use sov_cyferio_hub::service::DaProvider;
 use sov_cyferio_hub::spec::CyferioSpec;
-
+use sov_db::ledger_db::LedgerDb;
+use sov_db::storage_manager::NativeStorageManager;
 
 use sov_mock_zkvm::MockZkvmHost;
 use sov_mock_zkvm::{MockCodeCommitment, MockZkvm};
@@ -68,7 +67,7 @@ impl FullNodeBlueprint<Native> for CyferioRollup<Native> {
     type DaService = DaServiceWithRetries<DaProvider>;
     /// Manager for the native storage lifecycle.
     type StorageManager = NativeStorageManager<
-    CyferioSpec,
+        CyferioSpec,
         ProverStorage<DefaultStorageSpec<<<Self::Spec as Spec>::CryptoSpec as CryptoSpec>::Hasher>>,
     >;
     /// Prover service.
@@ -118,7 +117,9 @@ impl FullNodeBlueprint<Native> for CyferioRollup<Native> {
         rollup_config: &RollupConfig<<Self::Spec as Spec>::Address, Self::DaService>,
     ) -> Self::DaService {
         DaServiceWithRetries::new_fast(
-            DaProvider::from_config(rollup_config.da.clone()).await.unwrap(),
+            DaProvider::from_config(rollup_config.da.clone())
+                .await
+                .unwrap(),
         )
     }
 

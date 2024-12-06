@@ -5,6 +5,8 @@ use sov_modules_api::cli::{FileNameArg, JsonStringArg};
 use sov_modules_rollup_blueprint::WalletBlueprint;
 #[cfg(all(feature = "celestia_da", not(feature = "mock_da")))]
 use sov_rollup_starter::celestia_rollup::CelestiaRollup as StarterRollup;
+#[cfg(feature = "cyferio_da")]
+use sov_rollup_starter::cyferio_rollup::CyferioRollup as StarterRollup;
 #[cfg(all(feature = "mock_da", not(feature = "celestia_da")))]
 use sov_rollup_starter::mock_rollup::MockRollup as StarterRollup;
 use stf_starter::runtime::RuntimeSubcommand;

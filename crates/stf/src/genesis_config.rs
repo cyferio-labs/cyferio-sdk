@@ -12,6 +12,8 @@ use sov_paymaster::PaymasterConfig;
 use sov_prover_incentives::ProverIncentivesConfig;
 use sov_sequencer_registry::SequencerConfig;
 
+use confidential_token::BankConfig as ConfidentialTokenConfig;
+
 use super::GenesisConfig;
 use crate::Runtime;
 
@@ -32,6 +34,8 @@ pub struct GenesisPaths {
     pub chain_state_genesis_path: PathBuf,
     /// Paymaster genesis path.
     pub paymaster_genesis_path: PathBuf,
+    /// Confidential token genesis path.
+    pub confidential_token_genesis_path: PathBuf,
 }
 
 impl GenesisPaths {
@@ -49,6 +53,7 @@ impl GenesisPaths {
             prover_incentives_genesis_path: dir.as_ref().join("prover_incentives.json"),
             chain_state_genesis_path: dir.as_ref().join("chain_state.json"),
             paymaster_genesis_path: dir.as_ref().join("paymaster.json"),
+            confidential_token_genesis_path: dir.as_ref().join("confidential_token.json"),
         }
     }
 }
@@ -81,6 +86,9 @@ pub fn create_genesis_config<S: Spec>(
     let paymaster_config: PaymasterConfig<S> =
         read_genesis_json(&genesis_paths.paymaster_genesis_path)?;
 
+    let confidential_token_config: ConfidentialTokenConfig<S> =
+        read_genesis_json(&genesis_paths.confidential_token_genesis_path)?;
+
     Ok(GenesisConfig::new(
         accounts_config,
         nonces_config,
@@ -92,6 +100,7 @@ pub fn create_genesis_config<S: Spec>(
         chain_state_config,
         blob_storage_config,
         paymaster_config,
+        confidential_token_config,
     ))
 }
 

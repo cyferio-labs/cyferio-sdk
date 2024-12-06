@@ -77,6 +77,8 @@ pub struct Runtime<S: Spec> {
     pub blob_storage: sov_blob_storage::BlobStorage<S>,
     /// The Paymaster module.
     pub paymaster: sov_paymaster::Paymaster<S>,
+    /// The confidential token module.
+    pub confidential_token: confidential_token::Bank<S>,
 }
 
 impl<S: Spec> sov_modules_stf_blueprint::Runtime<S> for Runtime<S>
