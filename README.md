@@ -55,7 +55,7 @@ By leveraging FHE, advanced modular rollup designs, and parallelism in computati
   - **Flexible Gas Fees**: Implement dynamic gas fee structures to lower entry barriers.
 
 <p align="center">
- <img src="assets/Cyferio SDK flow.png" alt="Cyferio SDK flow"/>
+ <img src="assets/Cyferio SDK Flow.png" alt="Cyferio SDK Flow"/>
     <br>
     <em>The Workflow of Cyferio SDK</em>
 </p>
