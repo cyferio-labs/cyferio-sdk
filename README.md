@@ -71,115 +71,176 @@ Note that for local debugging, you can simply switch to `mock_da` by changing th
 default = ["mock_da", "risc0"]
 ```
 
-## How to run the demo rollup with mock-da
+## Rollup Starter for `confidential-token` module
 
-1. Change the working directory:
+This guide provides step-by-step instructions for setting up and interacting with the `confidential-token` module, which enables confidential token operations using Fully Homomorphic Encryption (FHE).
 
-```shell,test-ci
-$ cd crates/rollup/
+### Setup
+
+#### 1. Configure the Environment
+
+We use an optimistic-like rollup configuration since applying a zk prover to FHE is still under development. Check [the research report by Zama](https://www.zama.ai/post/verifiable-fhe-bootstrapping-using-snarks) for the latest updates on verifiable FHE. 
+
+Set the following environment variables:
+
+```sh
+export SKIP_GUEST_BUILD=1
+export SOV_PROVER_MODE=skip
 ```
 
-2. If you want to run a fresh rollup, clean the database:
+#### 2. Set Up FHE Keys
 
-```sh,test-ci
-$ make clean-db
+The rollup requires a set of keys: `{public key, server key, private key}`.
+
+> **Note**: For demo purposes, keys are stored insecurely in a JSON file. In production, store the public and server keys securely on-chain and the private key within the node.
+
+Generate the FHE keys:
+
+```sh
+# Run this command in the project root directory
+
+cargo run --release --bin fhe-keygen
 ```
 
-3. Start the rollup node:
+#### 3. Generate Call Messages for `confidential-token`
 
-This will compile and start the rollup node:
+These scripts will be used to invoke confidential operations like token creation, transfer, and minting.
 
-```shell,test-ci,bashtestmd:long-running,bashtestmd:wait-until=RPC
-$ cargo run --bin node
+Generate the scripts:
+
+```sh
+# Run this command in the project root directory
+
+cargo run --release --bin request-scripts-gen
 ```
 
-4. Submit a token creation transaction to the `bank` module:
+### Running the Node
 
-```sh,test-ci
-$ make test-create-token
+#### 1. Navigate to the Rollup Directory
+
+```sh
+cd crates/rollup/
 ```
 
-5. Note the transaction hash from the output of the above command
+#### 2. Clean the Database and Wallet (Optional)
 
-```text
-Submitting tx: 0: 0xc4a09c4bc4e0a2425384de1f9d468070f4616f03d503367287774c7191ef25db
-Transaction 0xc4a09c4bc4e0a2425384de1f9d468070f4616f03d503367287774c7191ef25db has been submitted: AcceptTxResponse { data: TxInfo { id: TxHash("0xa02ed59b5c698d49ad088584b86aff2134fd8e96746c1fce57b2518eb7c843e2"), status: Submitted }, meta: {} }
-Triggering batch publishing
-Your batch was submitted to the sequencer for publication. Response: SubmittedBatchInfo { da_height: 2, num_txs: 1 }
-Going to wait for target slot number 2 to be processed, up to 300s
-Rollup has processed target DA height=2!
+To start with a fresh rollup:
+
+```sh
+make clean-db
+make clean-wallet
 ```
 
-6. To get the token address, fetch the events of the transaction hash from #5
+> **Note**: Skip this step if you wish to retain the previous wallet setup.
 
-```bash,test-ci
-$ curl -sS http://127.0.0.1:12346/ledger/txs/0xc4a09c4bc4e0a2425384de1f9d468070f4616f03d503367287774c7191ef25db | jq
-{
-  "data": {
-    "type": "tx",
-    "number": 0,
-    "hash": "0xc4a09c4bc4e0a2425384de1f9d468070f4616f03d503367287774c7191ef25db",
-    "event_range": {
-      "start": 0,
-      "end": 1
-    },
-    "body": "",
-    "receipt": {
-      "result": "successful",
-      "data": {
-        "gas_used": [
-          3296,
-          3296
-        ]
-      }
-    },
-    "events": [],
-    "batch_number": 0
-  },
-  "meta": {}
-}
-$ curl -sS http://127.0.0.1:12346/ledger/txs/0xc4a09c4bc4e0a2425384de1f9d468070f4616f03d503367287774c7191ef25db/events | jq
-{
-  "data": [
-    {
-      "type": "event",
-      "number": 0,
-      "key": "Bank/TokenCreated",
-      "value": {
-        "TokenCreated": {
-          "token_name": "sov-test-token",
-          "coins": {
-            "amount": 1000000,
-            "token_id": "token_17zrpsyv06x7wmf2hg878gg5szwurckr3e2u77fvrdmanjhve8r2sj4jy42"
-          },
-          "minter": {
-            "User": "sov15vspj48hpttzyvxu8kzq5klhvaczcpyxn6z6k0hwpwtzs4a6wkvqwr57gc"
-          },
-          "authorized_minters": [
-            {
-              "User": "sov1l6n2cku82yfqld30lanm2nfw43n2auc8clw7r5u5m6s7p8jrm4zqrr8r94"
-            },
-            {
-              "User": "sov15vspj48hpttzyvxu8kzq5klhvaczcpyxn6z6k0hwpwtzs4a6wkvqwr57gc"
-            }
-          ]
-        }
-      },
-      "module": {
-        "type": "moduleRef",
-        "name": "bank"
-      }
-    }
-  ],
-  "meta": {}
-}
+#### 3. Start the Rollup Node
+
+Compile and start the rollup node:
+
+```sh
+# Ensure environment variables are set
+# Use --release for optimized performance
+
+cargo run --release --bin node
 ```
 
-7. Get a total supply of the token:
+### Interacting with `confidential-token`
 
-```bash,test-ci,bashtestmd:compare-output
-$ curl -Ss http://127.0.0.1:12346/modules/bank/tokens/token_17zrpsyv06x7wmf2hg878gg5szwurckr3e2u77fvrdmanjhve8r2sj4jy42/total-supply | jq -c -M
-{"data":{"amount":1000000,"token_id":"token_17zrpsyv06x7wmf2hg878gg5szwurckr3e2u77fvrdmanjhve8r2sj4jy42"},"meta":{}}
+#### 1. Open a New Terminal
+
+- Navigate to the `crates/rollup/` directory.
+- Ensure the environment variables from the [configuration section](#1-configure-the-environment) are set.
+
+#### 2. Build `sov-cli` and Import Keys
+
+Import the token deployer's keys from `test-data/keys/token_deployer_private_key.json`:
+
+```sh
+make import-keys
 ```
+
+#### 3. Query the FHE Public Key via RPC
+
+Retrieve the FHE public key for encrypting transactions:
+
+```sh
+make get-fhe-public-key
+```
+
+#### 4. Create Confidential Tokens
+
+Create and mint 1,000 encrypted tokens to the address `sov1l6n...r94`:
+
+```sh
+# Wait 5–10 seconds for the transaction to complete
+
+make test-fhe-create-token
+```
+
+Monitor the server logs for FHE operations.
+
+#### 5. Query the Total Supply of Tokens
+
+Fetch the total token supply:
+
+- **Encrypted (Ciphertext):**
+
+  ```sh
+  make test-fhe-token-raw-supply-of
+  ```
+
+- **Decrypted (Plaintext):**
+
+  ```sh
+  make test-fhe-token-supply-of
+  ```
+
+#### 6. Mint Additional Confidential Tokens
+
+Mint an additional 500 encrypted tokens to the same address:
+
+```sh
+# Wait 5–10 seconds for the transaction to complete
+
+make test-fhe-mint-token
+```
+
+Verify the updated total supply as in the previous step.
+
+#### 7. Transfer Confidential Tokens
+
+Transfer 100 encrypted tokens from `sov1l6n...r94` to `sov15vs...7gc`:
+
+```sh
+# Wait 5–10 seconds for the transaction to complete
+
+make test-fhe-token-transfer
+```
+
+#### 8. Query User Balance via RPC
+
+Replace `"user_address": "ADDRESS_TO_QUERY"` with the desired address.
+
+##### Encrypted Balance (Ciphertext)
+
+```sh
+curl -sS -X POST -H "Content-Type: application/json" \
+-d '{"jsonrpc":"2.0","method":"confidentialToken_rawBalanceOf","params":{"user_address":"sov1l6n...r94", "token_id":"TOKEN_ID"},"id":1}' \
+http://127.0.0.1:12345
+```
+
+##### Decrypted Balance (Plaintext)
+
+```sh
+curl -sS -X POST -H "Content-Type: application/json" \
+-d '{"jsonrpc":"2.0","method":"confidentialToken_balanceOf","params":{"user_address":"sov1l6n...r94", "token_id":"TOKEN_ID"},"id":1}' \
+http://127.0.0.1:12345
+```
+
+### Notes
+
+- **Security Considerations**: This setup is for demo purposes. In production, implement secure key storage and management practices.
+- **Performance**: Use `--release` mode for faster FHE operations.
+- **Monitoring**: Check server logs to monitor FHE operations and transaction processing.
 
 Feel free to explore and contribute to the project. For any questions or issues, please open an issue or contact the maintainers.

@@ -152,10 +152,10 @@ test-fhe-mint-token:
 	@echo "Submitting a batch"
 	$(SOV_CLI_REL_PATH) node submit-batch --wait-for-processing by-nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY
 
-test-fhe-bank-supply-of:
+test-fhe-token-supply-of:
 	curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"confidentialToken_supplyOf","params":{"token_id":"token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l"},"id":1}' http://127.0.0.1:12345
 
-test-fhe-bank-raw-supply-of:
+test-fhe-token-raw-supply-of:
 	curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"confidentialToken_rawSupplyOf","params":{"token_id":"token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l"},"id":1}' http://127.0.0.1:12345
 
 test-fhe-user-balance-of:
