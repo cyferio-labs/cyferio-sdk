@@ -123,17 +123,17 @@ make test-fhe-token-transfer
 To check the balance in ciphertext:
 
 ```sh
-curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"fheBank_rawBalanceOf","params":{"user_address":"PASTE_ADDRESS_HERE", "token_id":"token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l"},"id":1}' http://127.0.0.1:12345
+curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"fheBank_rawBalanceOf","params":{"user_address":"PASTE_ADDRESS_HERE", "token_id":"token_1jj28lgplh28xfefte5990tnt6ka7gdy6z8zudh38z02yp3jrvhysrczk99"},"id":1}' http://127.0.0.1:12345
 ```
 
 Example command for checking the balance of `sov1l6n2cku82yfqld30lanm2nfw43n2auc8clw7r5u5m6s7p8jrm4zqrr8r94`:
 
 ```sh
-curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"fheBank_rawBalanceOf","params":{"user_address":"sov1l6n2cku82yfqld30lanm2nfw43n2auc8clw7r5u5m6s7p8jrm4zqrr8r94", "token_id":"token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l"},"id":1}' http://127.0.0.1:12345
+curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"fheBank_rawBalanceOf","params":{"user_address":"sov1l6n2cku82yfqld30lanm2nfw43n2auc8clw7r5u5m6s7p8jrm4zqrr8r94", "token_id":"token_1jj28lgplh28xfefte5990tnt6ka7gdy6z8zudh38z02yp3jrvhysrczk99"},"id":1}' http://127.0.0.1:12345
 ```
 
 To check the balance <u>**in plaintext**</u>:
 
 ```sh
-curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"fheBank_balanceOf","params":{"user_address":"PASTE_ADDRESS_HERE", "token_id":"token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l"},"id":1}' http://127.0.0.1:12345
+curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"fheBank_balanceOf","params":{"user_address":"PASTE_ADDRESS_HERE", "token_id":"token_1jj28lgplh28xfefte5990tnt6ka7gdy6z8zudh38z02yp3jrvhysrczk99"},"id":1}' http://127.0.0.1:12345
 ```
