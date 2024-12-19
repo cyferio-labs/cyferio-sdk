@@ -118,7 +118,7 @@ test-create-token: check-sov-cli
 test-create-token:
 	$(SOV_CLI_REL_PATH) node set-url http://127.0.0.1:12346
 	$(SOV_CLI_REL_PATH) keys import --skip-if-present --nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY --path ../../test-data/keys/token_deployer_private_key.json
-	$(SOV_CLI_REL_PATH) transactions import from-file bank --chain-id 4321 --max-fee 100000000 --path ../../test-data/requests/create_token.json
+	$(SOV_CLI_REL_PATH) transactions import from-file bank --chain-id 4321 --max-fee 10000000000000000 --path ../../test-data/requests/create_token.json
 	@echo "Submitting a batch"
 	$(SOV_CLI_REL_PATH) node submit-batch --wait-for-processing by-nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY
 
@@ -132,7 +132,7 @@ test-fhe-create-token: check-sov-cli
 test-fhe-create-token:
 	$(SOV_CLI_REL_PATH) node set-url http://127.0.0.1:12346
 	$(SOV_CLI_REL_PATH) keys import --skip-if-present --nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY --path ../../test-data/keys/token_deployer_private_key.json
-	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 100000000 --path ../../test-data/requests/fhe/create_token.json
+	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 10000000000000000 --path ../../test-data/requests/fhe/create_token.json
 	@echo "Submitting a batch"
 	$(SOV_CLI_REL_PATH) node submit-batch --wait-for-processing by-nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY
 
@@ -140,7 +140,16 @@ test-fhe-token-transfer: check-sov-cli
 test-fhe-token-transfer:
 	$(SOV_CLI_REL_PATH) node set-url http://127.0.0.1:12346
 	$(SOV_CLI_REL_PATH) keys import --skip-if-present --nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY --path ../../test-data/keys/token_deployer_private_key.json
-	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 100000000 --path ../../test-data/requests/fhe/transfer.json
+	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 10000000000000000 --path ../../test-data/requests/fhe/transfer.json
+	@echo "Submitting a batch"
+	$(SOV_CLI_REL_PATH) node submit-batch --wait-for-processing by-nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY
+
+test-fhe-batch-token-transfer: check-sov-cli
+test-fhe-batch-token-transfer:
+	$(SOV_CLI_REL_PATH) node set-url http://127.0.0.1:12346
+	$(SOV_CLI_REL_PATH) keys import --skip-if-present --nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY --path ../../test-data/keys/token_deployer_private_key.json
+	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 10000000000000000 --path ../../test-data/requests/fhe/transfer.json
+	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 10000000000000000 --path ../../test-data/requests/fhe/transfer.json
 	@echo "Submitting a batch"
 	$(SOV_CLI_REL_PATH) node submit-batch --wait-for-processing by-nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY
 
@@ -148,18 +157,28 @@ test-fhe-mint-token: check-sov-cli
 test-fhe-mint-token:
 	$(SOV_CLI_REL_PATH) node set-url http://127.0.0.1:12346
 	$(SOV_CLI_REL_PATH) keys import --skip-if-present --nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY --path ../../test-data/keys/token_deployer_private_key.json
-	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 100000000 --path ../../test-data/requests/fhe/mint.json
+	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 10000000000000000 --path ../../test-data/requests/fhe/mint.json
+	@echo "Submitting a batch"
+	$(SOV_CLI_REL_PATH) node submit-batch --wait-for-processing by-nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY
+
+test-fhe-batch-mint-token: check-sov-cli
+test-fhe-batch-mint-token:
+	$(SOV_CLI_REL_PATH) node set-url http://127.0.0.1:12346
+	$(SOV_CLI_REL_PATH) keys import --skip-if-present --nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY --path ../../test-data/keys/token_deployer_private_key.json
+	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 10000000000000000 --path ../../test-data/requests/fhe/mint.json
+	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 10000000000000000 --path ../../test-data/requests/fhe/mint.json
+	$(SOV_CLI_REL_PATH) transactions import from-file confidential-token --chain-id 4321 --max-fee 10000000000000000 --path ../../test-data/requests/fhe/mint.json
 	@echo "Submitting a batch"
 	$(SOV_CLI_REL_PATH) node submit-batch --wait-for-processing by-nickname DANGER__DO_NOT_USE_WITH_REAL_MONEY
 
 test-fhe-token-supply-of:
-	curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"confidentialToken_supplyOf","params":{"token_id":"token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l"},"id":1}' http://127.0.0.1:12345
+	curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"confidentialToken_supplyOf","params":{"token_id":"token_1jj28lgplh28xfefte5990tnt6ka7gdy6z8zudh38z02yp3jrvhysrczk99"},"id":1}' http://127.0.0.1:12345
 
 test-fhe-token-raw-supply-of:
-	curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"confidentialToken_rawSupplyOf","params":{"token_id":"token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l"},"id":1}' http://127.0.0.1:12345
+	curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"confidentialToken_rawSupplyOf","params":{"token_id":"token_1jj28lgplh28xfefte5990tnt6ka7gdy6z8zudh38z02yp3jrvhysrczk99"},"id":1}' http://127.0.0.1:12345
 
 test-fhe-user-balance-of:
-	curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"confidentialToken_balanceOf","params":{"user_address":"sov1l6n2cku82yfqld30lanm2nfw43n2auc8clw7r5u5m6s7p8jrm4zqrr8r94", "token_id":"token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l"},"id":1}' http://127.0.0.1:12345
+	curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"confidentialToken_balanceOf","params":{"user_address":"sov1l6n2cku82yfqld30lanm2nfw43n2auc8clw7r5u5m6s7p8jrm4zqrr8r94", "token_id":"token_1jj28lgplh28xfefte5990tnt6ka7gdy6z8zudh38z02yp3jrvhysrczk99"},"id":1}' http://127.0.0.1:12345
 
 test-fhe-user-raw-balance-of:
-	curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"confidentialToken_rawBalanceOf","params":{"user_address":"sov1l6n2cku82yfqld30lanm2nfw43n2auc8clw7r5u5m6s7p8jrm4zqrr8r94", "token_id":"token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l"},"id":1}' http://127.0.0.1:12345
+	curl -sS -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"confidentialToken_rawBalanceOf","params":{"user_address":"sov1l6n2cku82yfqld30lanm2nfw43n2auc8clw7r5u5m6s7p8jrm4zqrr8r94", "token_id":"token_1jj28lgplh28xfefte5990tnt6ka7gdy6z8zudh38z02yp3jrvhysrczk99"},"id":1}' http://127.0.0.1:12345
