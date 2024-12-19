@@ -71,7 +71,7 @@ fn main() {
             "mint_to_address": "sov1l6n2cku82yfqld30lanm2nfw43n2auc8clw7r5u5m6s7p8jrm4zqrr8r94",
             "coins": {
                 "amount": mint_amount,
-                "token_id": "token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l",
+                "token_id": "token_1jj28lgplh28xfefte5990tnt6ka7gdy6z8zudh38z02yp3jrvhysrczk99",
             },
         },
     });
@@ -88,7 +88,7 @@ fn main() {
             "to": "sov15vspj48hpttzyvxu8kzq5klhvaczcpyxn6z6k0hwpwtzs4a6wkvqwr57gc",
             "coins": {
                 "amount": transfer_amount,
-                "token_id": "token_1p0cc94vkffzsyy8xdtmgu70h2lxg85zrqcns7dzaz2pqlt3w3ypq2duf6l",
+                "token_id": "token_1jj28lgplh28xfefte5990tnt6ka7gdy6z8zudh38z02yp3jrvhysrczk99",
             },
         },
     });
