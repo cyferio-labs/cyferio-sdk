@@ -1,6 +1,5 @@
 use std::hash::Hash;
 
-use borsh::BorshDeserialize;
 use sov_modules_api::digest::Digest;
 use sov_modules_api::{CryptoSpec, ModuleId, Spec};
 use sov_state::codec::{BcsCodec, BorshCodec, EncodeLike};
@@ -75,7 +74,7 @@ impl<'a, S: Spec> Payable<S> for TokenHolderRef<'a, S> {
 }
 
 #[derive(
-    Debug, Clone, Eq, PartialEq, serde::Deserialize, BorshDeserialize, derive_more::Display,
+    Debug, Clone, Eq, PartialEq, serde::Deserialize, borsh::BorshDeserialize, derive_more::Display,
 )]
 #[serde(rename_all = "snake_case")]
 /// The identifier of a a payable entity on the rollup. This can be either a user or a module.

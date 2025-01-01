@@ -5,8 +5,7 @@ use std::fmt::Formatter;
 // #[cfg(feature = "native")]
 // use std::num::ParseIntError;
 
-use anyhow::{bail, Context};
-use borsh::{BorshDeserialize, BorshSerialize};
+use anyhow::bail;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "arbitrary")]
