@@ -12,3 +12,8 @@ crates/rollup/mock_da.sqlite
 rollup-schema.json
 runtime_call.json
 **/.DS_Store
+
+# ignore FHE-related files in the test-data directory
+test-data/keys/private_key.json
+test-data/requests/fhe/*
+test-data/genesis/**/confidential_token.json
