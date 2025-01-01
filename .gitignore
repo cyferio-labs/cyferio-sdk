@@ -11,3 +11,4 @@ docker/credentials/*
 crates/rollup/mock_da.sqlite
 rollup-schema.json
 runtime_call.json
+**/.DS_Store
