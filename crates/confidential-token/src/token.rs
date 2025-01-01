@@ -22,8 +22,8 @@ use crate::utils::{Payable, TokenHolder, TokenHolderRef};
 
 // FHE deps
 use bincode;
+use tfhe::safe_serialization::{safe_deserialize, safe_serialize};
 use tfhe::{prelude::*, CompressedFheUint64, FheUint64, PublicKey};
-
 /// Type alias to store an amount of token.
 pub type EncryptedAmount = Vec<u8>; // as CompressedFheUint64 ciphertext
 
@@ -60,10 +60,7 @@ pub struct Coins {
 pub enum CoinsFromStrError {
     /// The amount could not be deserialized as tfhe ciphertext.
     #[error("Could not parse {input} as a valid amount: {err}")]
-    InvalidAmount {
-        input: String,
-        err: Box<bincode::ErrorKind>,
-    },
+    InvalidAmount { input: String, err: anyhow::Error },
     /// The input string was malformed, so the `amount` substring could not be extracted.
     #[error("No amount was provided. Make sure that your input is in the format: amount,token_id. Example: 100,sov15vspj48hpttzyvxu8kzq5klhvaczcpyxn6z6k0hwpwtzs4a6wkvqmlyjd6")]
     NoAmountProvided,
@@ -95,10 +92,10 @@ impl FromStr for Coins {
 
         // Check if amount can deserialize from Vec<u8> into CompressedFheUint64
         let _: CompressedFheUint64 =
-            bincode::deserialize(&amount_byte.clone().unwrap()).map_err(|e| {
+            safe_deserialize(amount_byte.clone().unwrap().as_slice(), 1 << 30).map_err(|e| {
                 CoinsFromStrError::InvalidAmount {
                     input: amount_str.into(),
-                    err: e.into(),
+                    err: anyhow::anyhow!("{}", e),
                 }
             })?;
 
@@ -165,17 +162,28 @@ impl<S: Spec> Token<S> {
         let encrypted_zero = FheUint64::try_encrypt(0 as u64, fhe_public_key)?;
 
         // Deserialize the balances
+        let max_buffer_size = 1 << 30; // 1 GB
         let from_balance = match self.balances.get(&from, state)? {
-            Some(balance) => bincode::deserialize::<CompressedFheUint64>(&balance)?.decompress(),
+            Some(balance) => {
+                safe_deserialize::<CompressedFheUint64>(balance.as_slice(), max_buffer_size)
+                    .unwrap()
+                    .decompress()
+            }
             None => bail!("Sender {} does not have a balance", from),
         };
         let to_balance = match self.balances.get(&to, state)? {
-            Some(balance) => bincode::deserialize::<CompressedFheUint64>(&balance)?.decompress(),
+            Some(balance) => {
+                safe_deserialize::<CompressedFheUint64>(balance.as_slice(), max_buffer_size)
+                    .unwrap()
+                    .decompress()
+            }
             None => encrypted_zero.clone(), // if the balance is not found, set it to zero
         };
 
         // Deserialize the encrypted amount to be transferred
-        let amount = bincode::deserialize::<CompressedFheUint64>(&amount)?.decompress();
+        let amount = safe_deserialize::<CompressedFheUint64>(amount.as_slice(), max_buffer_size)
+            .unwrap()
+            .decompress();
 
         // Check if the sender has enough balance
         let can_transfer = &from_balance.gt(&amount);
@@ -186,11 +194,15 @@ impl<S: Spec> Token<S> {
         // Update the balances and serialize them
         let from_balance = {
             let new_balance = from_balance - &transfer_amount;
-            bincode::serialize(&new_balance.compress())?
+            let mut buffer = vec![];
+            safe_serialize(&new_balance.compress(), &mut buffer, 1 << 30)?;
+            buffer
         };
         let to_balance = {
             let new_balance = to_balance + &transfer_amount;
-            bincode::serialize(&new_balance.compress())?
+            let mut buffer = vec![];
+            safe_serialize(&new_balance.compress(), &mut buffer, 1 << 30)?;
+            buffer
         };
 
         // Store the new balances in the state
@@ -235,14 +247,21 @@ impl<S: Spec> Token<S> {
         let encrypted_zero = FheUint64::try_encrypt(0 as u64, fhe_public_key)?;
 
         // get and deserialize the balance of the mint_to_identity
+        let max_buffer_size = 1 << 30; // 1 GB
         let to_balance = match self.balances.get(&mint_to_identity, state)? {
-            Some(balance) => bincode::deserialize::<CompressedFheUint64>(&balance)?.decompress(),
+            Some(balance) => {
+                safe_deserialize::<CompressedFheUint64>(balance.as_slice(), max_buffer_size)
+                    .unwrap()
+                    .decompress()
+            }
             None => encrypted_zero.clone(), // if the balance is not found, set it to zero
         };
 
         // Check if the mint amount is valid
         let encrypted_zero = FheUint64::try_encrypt(0 as u64, fhe_public_key)?;
-        let amount = bincode::deserialize::<CompressedFheUint64>(amount)?.decompress();
+        let amount = safe_deserialize::<CompressedFheUint64>(amount.as_slice(), max_buffer_size)
+            .unwrap()
+            .decompress();
         let valid_amount = &amount.gt(&encrypted_zero);
 
         // If the mint amount is invalid, mint zero amount
@@ -251,16 +270,24 @@ impl<S: Spec> Token<S> {
         // Update the balances
         let to_balance = {
             let new_balance = to_balance + &mint_amount;
-            bincode::serialize(&new_balance.compress())?
+            let mut buffer = vec![];
+            safe_serialize(&new_balance.compress(), &mut buffer, 1 << 30)?;
+            buffer
         };
         self.balances.set(&mint_to_identity, &to_balance, state)?;
 
         // Update the total supply
         self.total_supply = {
-            let total_supply =
-                bincode::deserialize::<CompressedFheUint64>(&self.total_supply)?.decompress();
+            let total_supply = safe_deserialize::<CompressedFheUint64>(
+                self.total_supply.as_slice(),
+                max_buffer_size,
+            )
+            .unwrap()
+            .decompress();
             let new_total_supply = total_supply + &mint_amount;
-            bincode::serialize(&new_total_supply.compress())?
+            let mut buffer = vec![];
+            safe_serialize(&new_total_supply.compress(), &mut buffer, 1 << 30)?;
+            buffer
         };
 
         Ok(())
@@ -322,16 +349,23 @@ impl<S: Spec> Token<S> {
 
         let encrypted_zero = FheUint64::try_encrypt(0 as u64, fhe_public_key)?;
         let mut total_supply = encrypted_zero;
+
+        let max_buffer_size = 1 << 30; // 1 GB
         for (address, balance) in identities_and_balances.iter() {
             balances.set(address, balance, state)?;
             total_supply = {
-                let balance = bincode::deserialize::<CompressedFheUint64>(balance)?.decompress();
+                let balance =
+                    safe_deserialize::<CompressedFheUint64>(balance.as_slice(), max_buffer_size)
+                        .unwrap()
+                        .decompress();
                 total_supply + &balance
             }
         }
 
         // TODO: add total supply overflow check
-        let total_supply = bincode::serialize(&total_supply.compress())?;
+        let mut buffer = vec![];
+        safe_serialize(&total_supply.compress(), &mut buffer, 1 << 30)?;
+        let total_supply = buffer;
 
         let authorized_minters = unique_minters(authorized_minters);
 

@@ -1,5 +1,6 @@
 use bincode;
 use serde::{Deserialize, Serialize};
+use tfhe::safe_serialization::{safe_deserialize, safe_serialize};
 use tfhe::{
     generate_keys, prelude::*, ClientKey, CompressedPublicKey, CompressedServerKey, ConfigBuilder,
     PublicKey, ServerKey,
@@ -109,21 +110,29 @@ pub fn fhe_key_gen() -> FheKeyGenConfig {
 }
 
 /// Serializes a FHE key
-fn serialize_key<T: ?Sized + serde::Serialize>(key: &T, key_name: &str) -> Result<Vec<u8>, ()> {
-    bincode::serialize(key).map_err(|_| {
+fn serialize_key<T>(key: &T, key_name: &str) -> Result<Vec<u8>, ()>
+where
+    T: tfhe::Versionize + tfhe::named::Named,
+    T: serde::Serialize,
+{
+    let mut buffer = vec![];
+    safe_serialize(key, &mut buffer, 1 << 30).map_err(|_| {
         eprintln!("Failed to serialize {} key", key_name);
         ()
-    })
+    })?;
+    Ok(buffer)
 }
 
 /// Deserializes a FHE key
-fn deserialize_key<'a, T>(data: &'a [u8], key_name: &str) -> Option<T>
+fn deserialize_key<T>(key: &[u8], key_name: &str) -> Option<T>
 where
-    T: serde::de::Deserialize<'a>,
+    T: tfhe::Unversionize + tfhe::named::Named,
+    T: serde::de::DeserializeOwned,
 {
-    bincode::deserialize(data)
+    safe_deserialize(key, 1 << 30)
         .map_err(|_| {
             eprintln!("Failed to deserialize {} key", key_name);
+            ()
         })
         .ok()
 }

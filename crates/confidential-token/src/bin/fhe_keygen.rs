@@ -20,21 +20,32 @@ fn main() {
 
     // get the root path and join with the key directory
     let root_path = env::current_dir().unwrap();
-    let genesis_path = path::Path::new(&root_path).join("test-data/genesis/cyferio");
-    // let sui_genesis_path = path::Path::new(&root_path).join("test-data/genesis/sui");
+    let cyferio_genesis_path = path::Path::new(&root_path).join("test-data/genesis/cyferio");
+    let mock_genesis_path = path::Path::new(&root_path).join("test-data/genesis/mock");
     let key_path = path::Path::new(&root_path).join("test-data/keys");
 
-    // write the genesis file
+    // Ensure directories exist
+    fs::create_dir_all(&cyferio_genesis_path).unwrap();
+    fs::create_dir_all(&mock_genesis_path).unwrap();
+
+    // write the genesis file to both directories
     fs::write(
-        genesis_path.join("confidential_token.json"),
+        cyferio_genesis_path.join("confidential_token.json"),
+        genesis_config.to_string(),
+    )
+    .unwrap();
+
+    fs::write(
+        mock_genesis_path.join("confidential_token.json"),
         genesis_config.to_string(),
     )
     .unwrap();
 
     println!(
-        "[Init] FHE Keys generated and serialized in {:?}\n[Init] Public key and server key are stored in {:?}",
+        "[Init] FHE Keys generated and serialized in {:?}\n[Init] Public key and server key are stored in:\n  - {:?}\n  - {:?}",
         start.elapsed(),
-        genesis_path.join("confidential_token.json")
+        cyferio_genesis_path.join("confidential_token.json"),
+        mock_genesis_path.join("confidential_token.json")
     );
 
     // store the private key for debug usage

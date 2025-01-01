@@ -76,7 +76,8 @@ stf-starter = { workspace = true, features = ["native"] }
 sov-universal-wallet = { workspace = true, features = ["serde"] }
 
 [features]
-default = ["cyferio_da", "risc0"]                 # set mock_da as the default features
+# default = ["cyferio_da", "risc0"]                 # set mock_da as the default features
+default = ["mock_da", "risc0"]                 # set mock_da as the default features
 mock_da = ["sov-mock-da"]
 cyferio_da = ["sov-cyferio-hub"]
 sp1 = ["sov-sp1-adapter", "sp1-starter"]

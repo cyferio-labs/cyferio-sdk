@@ -14,6 +14,7 @@ use crate::{Bank, Coins, EncryptedAmount, Token, TokenId};
 // FHE deps
 use crate::mock_decryption;
 use bincode;
+use tfhe::safe_serialization::{safe_deserialize, safe_serialize};
 use tfhe::{prelude::*, set_server_key, CompressedPublicKey, CompressedServerKey};
 
 /// The maximum number of addresses that can be authorized to mint a token.
@@ -95,12 +96,19 @@ impl<S: Spec> Bank<S> {
             .collect::<Vec<_>>();
 
         // Fetch the fhe keys from state and set the server key in the environment
-        let fhe_public_key =
-            bincode::deserialize::<CompressedPublicKey>(&self.fhe_public_key.get(state)?.unwrap())?
-                .decompress();
-        let fhe_server_key =
-            bincode::deserialize::<CompressedServerKey>(&self.fhe_server_key.get(state)?.unwrap())?
-                .decompress();
+        let max_buffer_size = 1 << 30; // 1 GB
+        let fhe_public_key = safe_deserialize::<CompressedPublicKey>(
+            self.fhe_public_key.get(state)?.unwrap().as_slice(),
+            max_buffer_size,
+        )
+        .unwrap()
+        .decompress();
+        let fhe_server_key = safe_deserialize::<CompressedServerKey>(
+            self.fhe_server_key.get(state)?.unwrap().as_slice(),
+            max_buffer_size,
+        )
+        .unwrap()
+        .decompress();
         set_server_key(fhe_server_key);
 
         let (token_id, token) = Token::<S>::create(
@@ -204,12 +212,18 @@ impl<S: Spec> Bank<S> {
             .with_context(context_logger)??;
 
         // Fetch the fhe keys from state and set the server key in the environment
-        let fhe_public_key =
-            bincode::deserialize::<CompressedPublicKey>(&self.fhe_public_key.get(state)?.unwrap())?
-                .decompress();
-        let fhe_server_key = bincode::deserialize::<CompressedServerKey>(
-            &self.fhe_server_key.get(state)?.unwrap().as_ref(),
-        )?
+        let max_buffer_size = 1 << 30; // 1 GB
+        let fhe_public_key = safe_deserialize::<CompressedPublicKey>(
+            self.fhe_public_key.get(state)?.unwrap().as_slice(),
+            max_buffer_size,
+        )
+        .unwrap()
+        .decompress();
+        let fhe_server_key = safe_deserialize::<CompressedServerKey>(
+            self.fhe_server_key.get(state)?.unwrap().as_slice(),
+            max_buffer_size,
+        )
+        .unwrap()
         .decompress();
         set_server_key(fhe_server_key);
 
@@ -295,12 +309,19 @@ impl<S: Spec> Bank<S> {
         };
 
         // Fetch the fhe keys from state and set the server key in the environment
-        let fhe_public_key =
-            bincode::deserialize::<CompressedPublicKey>(&self.fhe_public_key.get(state)?.unwrap())?
-                .decompress();
-        let fhe_server_key =
-            bincode::deserialize::<CompressedServerKey>(&self.fhe_server_key.get(state)?.unwrap())?
-                .decompress();
+        let max_buffer_size = 1 << 30; // 1 GB
+        let fhe_public_key = safe_deserialize::<CompressedPublicKey>(
+            self.fhe_public_key.get(state)?.unwrap().as_slice(),
+            max_buffer_size,
+        )
+        .unwrap()
+        .decompress();
+        let fhe_server_key = safe_deserialize::<CompressedServerKey>(
+            self.fhe_server_key.get(state)?.unwrap().as_slice(),
+            max_buffer_size,
+        )
+        .unwrap()
+        .decompress();
         set_server_key(fhe_server_key);
 
         let token = self
@@ -336,10 +357,13 @@ impl<S: Spec> Bank<S> {
         };
 
         // Fetch the fhe keys from state and set the server key in the environment
-        let fhe_server_key =
-            bincode::deserialize::<CompressedServerKey>(&self.fhe_server_key.get(state)?.unwrap())
-                .unwrap()
-                .decompress();
+        let max_buffer_size = 1 << 30; // 1 GB
+        let fhe_server_key = safe_deserialize::<CompressedServerKey>(
+            self.fhe_server_key.get(state)?.unwrap().as_slice(),
+            max_buffer_size,
+        )
+        .unwrap()
+        .decompress();
         set_server_key(fhe_server_key);
 
         // decrypt the balance from FheUint64 to u64
@@ -385,10 +409,13 @@ impl<S: Spec> Bank<S> {
             .unwrap();
 
         // Fetch the fhe keys from state and set the server key in the environment
-        let fhe_server_key =
-            bincode::deserialize::<CompressedServerKey>(&self.fhe_server_key.get(state)?.unwrap())
-                .unwrap()
-                .decompress();
+        let max_buffer_size = 1 << 30; // 1 GB
+        let fhe_server_key = safe_deserialize::<CompressedServerKey>(
+            self.fhe_server_key.get(state)?.unwrap().as_slice(),
+            max_buffer_size,
+        )
+        .unwrap()
+        .decompress();
         set_server_key(fhe_server_key);
 
         // decrypt the total supply from FheUint64 to u64
