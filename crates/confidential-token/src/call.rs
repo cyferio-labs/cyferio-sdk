@@ -13,7 +13,6 @@ use crate::{Bank, Coins, EncryptedAmount, Token, TokenId};
 
 // FHE deps
 use crate::mock_decryption;
-use bincode;
 use tfhe::safe_serialization::{safe_deserialize, safe_serialize};
 use tfhe::{prelude::*, set_server_key, CompressedPublicKey, CompressedServerKey};
 

@@ -1,4 +1,3 @@
-use bincode;
 use serde::{Deserialize, Serialize};
 use tfhe::safe_serialization::{safe_deserialize, safe_serialize};
 use tfhe::{

@@ -21,7 +21,6 @@ use crate::call::prefix_from_address_with_parent;
 use crate::utils::{Payable, TokenHolder, TokenHolderRef};
 
 // FHE deps
-use bincode;
 use tfhe::safe_serialization::{safe_deserialize, safe_serialize};
 use tfhe::{prelude::*, CompressedFheUint64, FheUint64, PublicKey};
 /// Type alias to store an amount of token.

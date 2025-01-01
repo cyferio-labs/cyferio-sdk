@@ -9,7 +9,6 @@ use crate::utils::TokenHolderRef;
 use crate::{Bank, TokenId};
 
 // FHE deps
-use bincode;
 use tfhe::safe_serialization::{safe_deserialize, safe_serialize};
 use tfhe::{prelude::*, CompressedPublicKey};
 
