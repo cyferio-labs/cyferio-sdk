@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 use std::{env, fs};
 
+use tfhe::safe_serialization::{safe_deserialize, safe_serialize};
 use tfhe::{prelude::*, ClientKey, CompressedFheUint64};
 
 // For timing
@@ -17,7 +18,8 @@ struct PrivateKey {
 /// Decrypts a FHE ciphertext
 pub fn decrypt(raw_ct: &Vec<u8>) -> u64 {
     let private_key = get_private_key();
-    let ct = bincode::deserialize::<CompressedFheUint64>(raw_ct)
+    let max_buffer_size = 1 << 30; // 1 GB
+    let ct = safe_deserialize::<CompressedFheUint64>(raw_ct.as_slice(), max_buffer_size)
         .unwrap()
         .decompress();
     ct.decrypt(&private_key)
@@ -37,8 +39,10 @@ fn get_private_key() -> ClientKey {
         .expect("Failed to read private key json");
     let config = serde_json::from_slice::<PrivateKey>(&raw_config)
         .expect("Failed to parse private key json");
+    let max_buffer_size = 1 << 30; // 1 GB
     let private_key =
-        bincode::deserialize(&config.fhe_private_key).expect("Failed to deserialize private key");
+        safe_deserialize::<ClientKey>(config.fhe_private_key.as_slice(), max_buffer_size)
+            .expect("Failed to deserialize private key");
     tracing::debug!("Private key deserialized in {:?}", start.elapsed());
     private_key
 }

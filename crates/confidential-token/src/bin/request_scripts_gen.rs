@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::{env, fs, path};
 
-use bincode;
 use confidential_token::fhe_key::FheKeyConfig;
+use tfhe::safe_serialization::{safe_deserialize, safe_serialize};
 use tfhe::{prelude::*, set_server_key, CompressedPublicKey, CompressedServerKey, FheUint64};
 
 // For timing
@@ -29,14 +29,19 @@ fn main() {
     let raw_config = fs::read(fhe_key_config_path).expect("Failed to read fhe key config json");
     let config = serde_json::from_slice::<FheKeyConfig>(&raw_config)
         .expect("Failed to parse fhe key config json");
-    let fhe_public_key = bincode::deserialize::<CompressedPublicKey>(&config.fhe_public_key)
-        .unwrap()
-        .decompress();
+
+    // Use safe deserialization with a large max buffer size
+    let max_buffer_size = 1 << 30; // 1 GB
+    let fhe_public_key =
+        safe_deserialize::<CompressedPublicKey>(config.fhe_public_key.as_slice(), max_buffer_size)
+            .unwrap()
+            .decompress();
 
     // read and set the server key in this environment
-    let fhe_server_key = bincode::deserialize::<CompressedServerKey>(&config.fhe_server_key)
-        .unwrap()
-        .decompress();
+    let fhe_server_key =
+        safe_deserialize::<CompressedServerKey>(config.fhe_server_key.as_slice(), max_buffer_size)
+            .unwrap()
+            .decompress();
     set_server_key(fhe_server_key);
 
     // create-token request
@@ -44,7 +49,11 @@ fn main() {
         let amount = FheUint64::try_encrypt(1_000 as u64, &fhe_public_key)
             .unwrap()
             .compress();
-        bincode::serialize(&amount).unwrap()
+
+        // Use safe serialization
+        let mut buffer = vec![];
+        safe_serialize(&amount, &mut buffer, max_buffer_size).unwrap();
+        buffer
     };
     let create_token_request = json!({
         "create_token": {
@@ -64,7 +73,11 @@ fn main() {
         let amount = FheUint64::try_encrypt(500 as u64, &fhe_public_key)
             .unwrap()
             .compress();
-        bincode::serialize(&amount).unwrap()
+
+        // Use safe serialization
+        let mut buffer = vec![];
+        safe_serialize(&amount, &mut buffer, max_buffer_size).unwrap();
+        buffer
     };
     let mint_request = json!({
         "mint": {
@@ -81,7 +94,11 @@ fn main() {
         let amount = FheUint64::try_encrypt(100 as u64, &fhe_public_key)
             .unwrap()
             .compress();
-        bincode::serialize(&amount).unwrap()
+
+        // Use safe serialization
+        let mut buffer = vec![];
+        safe_serialize(&amount, &mut buffer, max_buffer_size).unwrap();
+        buffer
     };
     let transfer_request = json!({
         "transfer": {

@@ -9,7 +9,7 @@ use crate::utils::TokenHolderRef;
 use crate::{Bank, TokenId};
 
 // FHE deps
-use bincode;
+use tfhe::safe_serialization::{safe_deserialize, safe_serialize};
 use tfhe::{prelude::*, CompressedPublicKey};
 
 /// Type for deserialized FheUint64
@@ -60,9 +60,14 @@ impl<S: Spec> Bank<S> {
         self.fhe_server_key
             .set::<Vec<u8>, _>(&config.fhe_server_key, state)?;
         tracing::debug!("raw FHE keys have been set");
-        let fhe_public_key = bincode::deserialize::<CompressedPublicKey>(&config.fhe_public_key)
-            .unwrap()
-            .decompress();
+
+        let max_buffer_size = 1 << 30; // 1 GB
+        let fhe_public_key = safe_deserialize::<CompressedPublicKey>(
+            config.fhe_public_key.as_slice(),
+            max_buffer_size,
+        )
+        .unwrap()
+        .decompress();
         tracing::debug!("FHE keys have been deserialized");
 
         let parent_prefix = self.tokens.prefix();
