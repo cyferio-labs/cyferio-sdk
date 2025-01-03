@@ -41,7 +41,7 @@ fn main() {
     let fhe_server_key =
         safe_deserialize::<CompressedServerKey>(config.fhe_server_key.as_slice(), max_buffer_size)
             .unwrap()
-            .decompress();
+            .decompress_to_gpu();
     set_server_key(fhe_server_key);
 
     // create-token request

@@ -107,7 +107,7 @@ impl<S: Spec> Bank<S> {
             max_buffer_size,
         )
         .unwrap()
-        .decompress();
+        .decompress_to_gpu();
         set_server_key(fhe_server_key);
 
         let (token_id, token) = Token::<S>::create(
@@ -223,7 +223,7 @@ impl<S: Spec> Bank<S> {
             max_buffer_size,
         )
         .unwrap()
-        .decompress();
+        .decompress_to_gpu();
         set_server_key(fhe_server_key);
 
         let authorizer = authorizer.as_token_holder();
@@ -320,7 +320,7 @@ impl<S: Spec> Bank<S> {
             max_buffer_size,
         )
         .unwrap()
-        .decompress();
+        .decompress_to_gpu();
         set_server_key(fhe_server_key);
 
         let token = self
@@ -362,7 +362,7 @@ impl<S: Spec> Bank<S> {
             max_buffer_size,
         )
         .unwrap()
-        .decompress();
+        .decompress_to_gpu();
         set_server_key(fhe_server_key);
 
         // decrypt the balance from FheUint64 to u64
@@ -414,7 +414,7 @@ impl<S: Spec> Bank<S> {
             max_buffer_size,
         )
         .unwrap()
-        .decompress();
+        .decompress_to_gpu();
         set_server_key(fhe_server_key);
 
         // decrypt the total supply from FheUint64 to u64
