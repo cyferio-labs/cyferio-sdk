@@ -26,12 +26,8 @@ sov-modules-api = { workspace = true }
 sov-state = { workspace = true }
 
 # FHE depencencies
-[target.'cfg(all(target_arch = "x86_64", unix))'.dependencies]
 tfhe = { version = "0.10.0", features = ["boolean", "shortint", "integer", "x86_64-unix", "gpu"] }
-[target.'cfg(all(target_arch = "aarch64", unix))'.dependencies]
-tfhe = { version = "0.10.0", features = ["boolean", "shortint", "integer", "aarch64-unix", "gpu"] }
 serde_json = { workspace = true }
-hex = { workspace = true }
 
 [dev-dependencies]
 tempfile = { workspace = true }
