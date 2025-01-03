@@ -19,36 +19,36 @@ publish = false
 rust-version = "1.73"
 
 [workspace.dependencies]
-sov-accounts = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-attester-incentives = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-chain-state = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-bank = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-blob-storage = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-paymaster = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-capabilities = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-celestia-adapter = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-cli = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-db = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-first-read-last-write-cache = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-kernels = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-ledger-apis = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-mock-da = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-mock-zkvm = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-modules-api = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-modules-rollup-blueprint = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-modules-stf-blueprint = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-nonces = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-prover-incentives = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-risc0-adapter = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-sp1-adapter = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-rollup-interface = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-sequencer = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-sequencer-registry = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-state = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-stf-runner = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-test-utils = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-rollup-apis = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-universal-wallet = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-accounts = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-attester-incentives = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-chain-state = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-bank = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-blob-storage = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-paymaster = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-capabilities = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-celestia-adapter = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-cli = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-db = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-first-read-last-write-cache = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-kernels = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-ledger-apis = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-mock-da = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-mock-zkvm = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-modules-api = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-modules-rollup-blueprint = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-modules-stf-blueprint = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-nonces = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-prover-incentives = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-risc0-adapter = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-sp1-adapter = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-rollup-interface = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-sequencer = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-sequencer-registry = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-state = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-stf-runner = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-test-utils = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-rollup-apis = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-universal-wallet = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
 stf-starter = { path = "./crates/stf" }
 example-module = { path = "./crates/example-module" }
 strum = { version = "0.26.3", features = ["derive"] }

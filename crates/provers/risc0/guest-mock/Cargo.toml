@@ -15,14 +15,14 @@ risc0-zkvm-platform = { version = "1.1" }
 serde = { version = "1.0.188", features = ["derive", "rc"] }
 
 
-sov-rollup-interface = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-mock-da = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-modules-stf-blueprint = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-modules-api = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-risc0-adapter = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-state = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-mock-zkvm = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
-sov-kernels = { git = "ssh://git@github.com/Sovereign-Labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-rollup-interface = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-mock-da = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-modules-stf-blueprint = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-modules-api = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-risc0-adapter = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-state = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-mock-zkvm = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
+sov-kernels = { git = "ssh://git@github.com/cyferio-labs/sovereign-sdk-wip.git", rev = "14e462e73a20cbd84900c8cf8e1ca3f4c1db3728" }
 
 stf-starter = { path = "../../../stf" }
 
